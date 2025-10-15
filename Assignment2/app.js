@@ -74,6 +74,6 @@ app.get("/logout", (req, res) => {
 });
 
 // Start Server
-app.listen(3000, () => {
-    console.log("Server started on http://localhost:3000");
+app.listen(5000, () => {
+    console.log("Server Running on http://localhost:5000");
 });
