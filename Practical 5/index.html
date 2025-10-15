@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Management System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #2c3e50;
+        }
+        .vehicle-info {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .output {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #eee;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Vehicle Management System</h1>
+    <p>This system demonstrates inheritance with a base Vehicle class and Car/Motorcycle subclasses.</p>
+    
+    <div class="vehicle-info">
+        <h2>Vehicle Controls</h2>
+        <button onclick="createCar()">Create Car</button>
+        <button onclick="createMotorcycle()">Create Motorcycle</button>
+        <button onclick="showFuelEfficiency()">Show Fuel Efficiency</button>
+        <button onclick="showMaintenanceSchedule()">Show Maintenance Schedule</button>
+    </div>
+    
+    <div class="output" id="output">
+        <!-- Output will appear here -->
+    </div>
+    
+    <script>
+        // Base Vehicle class
+        class Vehicle {
+            constructor(make, model, year, fuelCapacity) {
+                this.make = make;
+                this.model = model;
+                this.year = year;
+                this.fuelCapacity = fuelCapacity;
+                this.currentFuel = fuelCapacity;
+            }
+            
+            startEngine() {
+                return `${this.make} ${this.model}'s engine is now running.`;
+            }
+            
+            stopEngine() {
+                return `${this.make} ${this.model}'s engine is now stopped.`;
+            }
+            
+            calculateFuelEfficiency() {
+                // Base implementation - to be overridden by subclasses
+                return "Fuel efficiency calculation not available for generic vehicle.";
+            }
+            
+            getMaintenanceSchedule() {
+                // Base implementation - to be overridden by subclasses
+                return "Maintenance schedule not available for generic vehicle.";
+            }
+            
+            getInfo() {
+                return `${this.year} ${this.make} ${this.model} (Fuel: ${this.currentFuel}/${this.fuelCapacity}L)`;
+            }
+        }
+        
+        // Car subclass
+        class Car extends Vehicle {
+            constructor(make, model, year, fuelCapacity, doors, transmission) {
+                super(make, model, year, fuelCapacity);
+                this.doors = doors;
+                this.transmission = transmission;
+                this.type = "Car";
+            }
+            
+            calculateFuelEfficiency() {
+                // Cars typically have lower fuel efficiency
+                const efficiency = (this.fuelCapacity * 100) / 12; // km per full tank
+                return `${this.getInfo()} has a fuel efficiency of approximately ${efficiency.toFixed(1)} km per full tank.`;
+            }
+            
+            getMaintenanceSchedule() {
+                return `Maintenance for ${this.getInfo()}:
+                - Oil change every 10,000 km
+                - Tire rotation every 8,000 km
+                - Full inspection every 20,000 km`;
+            }
+            
+            getInfo() {
+                return `${super.getInfo()} [${this.doors}-door ${this.transmission} ${this.type}]`;
+            }
+        }
+        
+        // Motorcycle subclass
+        class Motorcycle extends Vehicle {
+            constructor(make, model, year, fuelCapacity, engineSize, hasSidecar) {
+                super(make, model, year, fuelCapacity);
+                this.engineSize = engineSize;
+                this.hasSidecar = hasSidecar;
+                this.type = "Motorcycle";
+            }
+            
+            calculateFuelEfficiency() {
+                // Motorcycles typically have better fuel efficiency
+                const efficiency = (this.fuelCapacity * 100) / 4; // km per full tank
+                return `${this.getInfo()} has a fuel efficiency of approximately ${efficiency.toFixed(1)} km per full tank.`;
+            }
+            
+            getMaintenanceSchedule() {
+                return `Maintenance for ${this.getInfo()}:
+                - Oil change every 5,000 km
+                - Chain lubrication every 1,000 km
+                - Brake inspection every 10,000 km`;
+            }
+            
+            getInfo() {
+                const sidecarInfo = this.hasSidecar ? "with sidecar" : "without sidecar";
+                return `${super.getInfo()} [${this.engineSize}cc ${this.type} ${sidecarInfo}]`;
+            }
+        }
+        
+        let currentVehicle = null;
+        const output = document.getElementById('output');
+        
+        function createCar() {
+            const makes = ["Toyota", "Honda", "Ford", "BMW", "Tesla"];
+            const models = ["Camry", "Civic", "Focus", "3 Series", "Model S"];
+            const transmissions = ["Automatic", "Manual"];
+            
+            const randomMake = makes[Math.floor(Math.random() * makes.length)];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            const randomYear = 2015 + Math.floor(Math.random() * 9);
+            const randomFuel = 40 + Math.floor(Math.random() * 30);
+            const randomDoors = Math.random() > 0.5 ? 4 : 2;
+            const randomTransmission = transmissions[Math.floor(Math.random() * transmissions.length)];
+            
+            currentVehicle = new Car(
+                randomMake,
+                randomModel,
+                randomYear,
+                randomFuel,
+                randomDoors,
+                randomTransmission
+            );
+            
+            output.innerHTML = `
+                <h3>Created new Car</h3>
+                <p>${currentVehicle.getInfo()}</p>
+                <p>${currentVehicle.startEngine()}</p>
+            `;
+        }
+        
+        function createMotorcycle() {
+            const makes = ["Harley-Davidson", "Honda", "Yamaha", "Kawasaki", "Ducati"];
+            const models = ["Sportster", "CBR", "YZF-R1", "Ninja", "Panigale"];
+            
+            const randomMake = makes[Math.floor(Math.random() * makes.length)];
+            const randomModel = models[Math.floor(Math.random() * models.length)];
+            const randomYear = 2015 + Math.floor(Math.random() * 9);
+            const randomFuel = 10 + Math.floor(Math.random() * 10);
+            const randomEngineSize = 500 + Math.floor(Math.random() * 1000);
+            const randomSidecar = Math.random() > 0.8;
+            
+            currentVehicle = new Motorcycle(
+                randomMake,
+                randomModel,
+                randomYear,
+                randomFuel,
+                randomEngineSize,
+                randomSidecar
+            );
+            
+            output.innerHTML = `
+                <h3>Created new Motorcycle</h3>
+                <p>${currentVehicle.getInfo()}</p>
+                <p>${currentVehicle.startEngine()}</p>
+            `;
+        }
+        
+        function showFuelEfficiency() {
+            if (!currentVehicle) {
+                output.innerHTML = "<p>Please create a vehicle first.</p>";
+                return;
+            }
+            
+            output.innerHTML = `
+                <h3>Fuel Efficiency</h3>
+                <p>${currentVehicle.calculateFuelEfficiency()}</p>
+            `;
+        }
+        
+        function showMaintenanceSchedule() {
+            if (!currentVehicle) {
+                output.innerHTML = "<p>Please create a vehicle first.</p>";
+                return;
+            }
+            
+            output.innerHTML = `
+                <h3>Maintenance Schedule</h3>
+                <pre>${currentVehicle.getMaintenanceSchedule()}</pre>
+            `;
+        }
+    </script>
+</body>
+</html>

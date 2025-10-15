@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input type="text" id="n1">
+  <input type="text" id="n2">
+  <button>Submit</button>
+  <p id="text"></p>
+  <p id="text1"></p>
+  
+  <script>
+    const input1 = document.getElementById("n1");
+    const input2 = document.getElementById("n2");
+    const button = document.querySelector("button");
+
+      const str = /^[a-zA-Z]+$/;
+
+    button.addEventListener("click", function(){
+      // check first input is only string and second input is only password
+      if (str.test(input1.value) && str.test(input2.value)) {
+        // alert("Valid inputs");
+         const message1 = "Valid inputs";
+        const colorText1 = document.getElementById("text1");
+        colorText1.innerHTML = message1;
+        colorText1.style.color = "Green";
+        input1.style.borderBlockColor = "Green";
+        input2.style.borderBlockColor = "Green";
+        
+      } else {
+        const message = "Invalid inputs. Please enter only letters.";
+        const colorText = document.getElementById("text");
+        colorText.innerHTML = message;
+        colorText.style.color = "red";
+        input1.style.borderBlockColor = "red";
+        input2.style.borderBlockColor = "red";
+      }
+
+
+    })
+  </script>
+</body>
+</html>
